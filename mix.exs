@@ -48,28 +48,17 @@ defmodule NervesLivebook.MixProject do
       {:livebook, "~> 0.1.0", only: [:dev, :prod]},
       {:nerves_runtime, "~> 0.11.3"},
       {:nerves_pack, "~> 0.4.0"},
+      {:nimble_options, "0.3.0"},
 
       # Dependencies for all targets except :host
-      {:circuits_uart, "~> 1.3", targets: @all_targets},
-      {:circuits_gpio, "~> 0.4", targets: @all_targets},
-      {:circuits_i2c, "~> 0.3", targets: @all_targets},
-      {:circuits_spi, "~> 0.1", targets: @all_targets},
-      {:pigpiox, "~>0.1"},
-      {:power_control, github: "cjfreeze/power_control", targets: @all_targets},
       {:ramoops_logger, "~> 0.1", targets: @all_targets},
-      {:bmp280, "~> 0.2", targets: @all_targets},
+      {:blue_heron, github: "axelson/blue_heron", branch: "allow-disabling-logging", override: true},
+      {:govee, github: "axelson/govee", targets: @all_targets},
+      {:blue_heron_transport_uart, github: "blue-heron/blue_heron_transport_uart", branch: "main", targets: @all_targets},
+      {:nerves_system_br, "~> 1.13.0", runtime: false, targets: @all_targets},
 
       # Dependencies for specific targets
-      {:nerves_system_rpi, "~> 1.15", runtime: false, targets: :rpi},
-      {:nerves_system_rpi0, "~> 1.15", runtime: false, targets: :rpi0},
-      {:nerves_system_rpi2, "~> 1.15", runtime: false, targets: :rpi2},
-      {:nerves_system_rpi3, "~> 1.15", runtime: false, targets: :rpi3},
-      {:nerves_system_rpi3a, "~> 1.15", runtime: false, targets: :rpi3a},
-      {:nerves_system_rpi4, "~> 1.15", runtime: false, targets: :rpi4},
-      {:nerves_system_bbb, "~> 2.10", runtime: false, targets: :bbb},
-      {:nerves_system_osd32mp1, "~> 0.6", runtime: false, targets: :osd32mp1},
-      {:nerves_system_x86_64, "~> 1.15", runtime: false, targets: :x86_64},
-      {:nerves_system_npi_imx6ull, "~> 0.2", runtime: false, targets: :npi_imx6ull}
+      {:nerves_system_rpi3, "1.13.0", runtime: false, targets: :rpi3},
     ]
   end
 

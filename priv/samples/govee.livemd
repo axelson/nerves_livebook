@@ -1,0 +1,103 @@
+# Example Govee
+
+## Note that this only works on Raspberry PI3's
+
+```elixir
+Node.self()
+```
+
+```elixir
+alias BlueHeron.HCI.Command.ControllerAndBaseband.WriteLocalName
+
+transport_config = %BlueHeronTransportUART{
+  device: "ttyAMA0",
+  uart_opts: [speed: 115_200],
+  init_commands: [%WriteLocalName{name: "Govee Controller"}]
+}
+
+devices = [
+  [
+    type: :h6001,
+    addr: 0xA4C138EC49BD
+  ]
+]
+```
+
+```elixir
+devices = [
+  [
+    type: :h6001,
+    addr: 0xA4C138EC49BD
+  ]
+]
+```
+
+```elixir
+alias Govee.BLEConnection
+
+{:ok, ble_connection} =
+  Govee.BLEConnection.start_link(devices: devices, transport_config: transport_config)
+```
+
+```elixir
+defmodule Demo do
+  alias Govee.CommonCommands
+
+  def off(server) do
+    CommonCommands.turn_off()
+    |> run_command(server)
+  end
+
+  def on(server) do
+    CommonCommands.turn_on()
+    |> run_command(server)
+  end
+
+  def brightness(server, value) do
+    CommonCommands.set_brightness(value)
+    |> run_command(server)
+  end
+
+  def set_color(server, hex) when is_integer(hex) do
+    CommonCommands.set_color(hex)
+    |> run_command(server)
+  end
+
+  def run_command(command, server) do
+    for_each_device(server, fn device ->
+      CommonCommands.send_command(command, device.att_client)
+    end)
+  end
+
+  defp for_each_device(server, fun) when is_function(fun, 1) do
+    Enum.each(Govee.BLEConnection.connected_devices(server), fun)
+  end
+end
+```
+
+```elixir
+Process.alive?(ble_connection)
+```
+
+```elixir
+Demo.brightness(ble_connection, 150)
+Demo.on(ble_connection)
+```
+
+```elixir
+Demo.off(ble_connection)
+```
+
+```elixir
+Govee.BLEConnection.connected_devices(ble_connection)
+```
+
+```elixir
+Demo.on(ble_connection)
+# Blue
+red = 0xFF000
+green = 0x00FF00
+blue = 0x0000FF
+purple = 0xFF00FF
+Demo.set_color(ble_connection, blue)
+```

@@ -34,6 +34,8 @@ config :livebook,
 
 config :nerves_runtime, :kernel, use_system_registry: false
 
+config :blue_heron, log_hci_dump_file: false
+
 # Erlinit can be configured without a rootfs_overlay. See
 # https://github.com/nerves-project/erlinit/ for more information on
 # configuring erlinit.
@@ -47,7 +49,23 @@ config :nerves, :erlinit,
 # * See https://hexdocs.pm/nerves_ssh/readme.html for general SSH configuration
 # * See https://hexdocs.pm/ssh_subsystem_fwup/readme.html for firmware updates
 
+key_paths =
+  [
+    ".ssh/id_rsa.pub",
+    ".ssh/id_desktop_rsa.pub",
+    ".ssh/id_laptop_rsa.pub",
+    ".ssh/id_nerves.pub",
+    ".ssh/id_air_laptop.pub"
+  ]
+  |> Enum.map(fn path -> Path.join(System.user_home!(), path) end)
+
+authorized_keys =
+  key_paths
+  |> Enum.filter(&File.exists?/1)
+  |> Enum.map(&File.read!/1)
+
 config :nerves_ssh,
+  authorized_keys: authorized_keys,
   user_passwords: [{"livebook", "nerves"}, {"root", "nerves"}],
   daemon_option_overrides: [
     {:auth_method_kb_interactive_data,
