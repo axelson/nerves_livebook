@@ -1,4 +1,4 @@
-# Example Govee
+# Govee H6001 Examples
 
 ## Note that this only works on Raspberry PI3's
 
@@ -14,14 +14,9 @@ transport_config = %BlueHeronTransportUART{
   uart_opts: [speed: 115_200],
   init_commands: [%WriteLocalName{name: "Govee Controller"}]
 }
-
-devices = [
-  [
-    type: :h6001,
-    addr: 0xA4C138EC49BD
-  ]
-]
 ```
+
+In order to find the correct address of your H6001 bulb you will need to scan with BlueHeron. Probably by attaching to a running device and checking what messages RingLogger outputs after initializing BlueHeron.
 
 ```elixir
 devices = [
