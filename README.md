@@ -2,41 +2,32 @@
 
 [![CircleCI](https://circleci.com/gh/fhunleth/nerves_livebook.svg?style=svg)](https://circleci.com/gh/fhunleth/nerves_livebook)
 
-The Nerves Livebook firmware lets you try out the Nerves projects on real
-hardware without needing to build anything. Within minutes, you'll have a
-Raspberry Pi or Beaglebone running Nerves. You'll be able to run code in
-[Livebooks](https://github.com/elixir-nx/livebook) and work through Nerves
-tutorials from the comfort of your browser.
+This Nerves Livebook firmware lets you try out the Govee H6001 Bluetooth LED
+bulb with the https://github.com/axelson/govee library
 
-*This is a work in progress. Most of our testing is on the Raspberry Pi Zero W*
+Example bulb:
+https://www.amazon.com/gp/product/B07CL2RMR7
+
+This is based on https://github.com/fhunleth/nerves_livebook but the system has
+been configured to be usable with https://github.com/blue-heron/blue_heron for
+Bluetooth Low Energy (BLE) support.
 
 ## Prerequisites
 
-To work through this tutorial, you'll need one of the following boards:
+To work through this tutorial, you'll need:
 
-* `bbb` - BeagleBone Black, BeagleBone Green, PocketBeagle, etc.
-* `rpi0` - Raspberry Pi Zero or Zero W
-* `rpi` - The original Raspberry Pi Model B
-* `rpi2` Raspberry Pi 2 Model B
-* `rpi3` - Raspberry Pi 3 Model B and Model B+
-* `rpi3a` - Raspberry Pi 3 Model A+
-* `rpi4` - Raspberry Pi 4 Model B
-* `osd32mp1` - Octavo OSD32MP1-BRK
-* `npi_imx6ull` - Seeed Studio imx6ull (select MicroSD boot mode)
+* `rpi3` - Raspberry Pi 3 B+
 
-Some of these are easier than others to use. If you have a choice, the Raspberry
-Pi Zero and BeagleBones are nice since you can connect them to your laptop or
-computer by one USB cable that supplies power and networking. The other boards
-require an Ethernet or WiFi connection.
+## Building the Firmware
 
-## Downloading the Firmware
+Make sure you've followed the Nerves getting started guide
+https://hexdocs.pm/nerves/installation.html and then run:
 
-Find the appropriate firmware or zip file
-[here](https://github.com/fhunleth/nerves_livebook/releases). If you're using
-`fwup` to write images to MicroSD cards, download the `.fw` extension and if
-you're using `etcher`, get the `zip` file. If you don't have a preference,
-download the appropriate `.fw` file and follow the `fwup` instructions since
-those will come in handy if you start using Nerves more.
+``` sh
+export MIX_TARGET=rpi3
+mix deps.get
+mix firmware
+```
 
 Once that's done, you're ready to burn the firmware to the MicroSD card.
 
@@ -89,29 +80,4 @@ is "nerves".
 
 ![Livebook screenshot](assets/livebook.jpg)
 
-## Going further
-
-At some point you'll want to create your own firmware. See the [Nerves
-Installation](https://hexdocs.pm/nerves/installation.html) and [Getting
-Started](https://hexdocs.pm/nerves/getting-started.html) guides for details.
-
-To build the Nerves Livebook firmware, make sure that you have run
-through the Nerves installation steps. Then open a terminal window and run the
-following:
-
-```sh
-$ git clone https://github.com/fhunleth/nerves_livebook.git
-$ cd nerves_livebook
-
-# Set the MIX_TARGET to the desired platform (rpi0, bbb, rpi3, etc.)
-$ export MIX_TARGET=rpi0
-$ mix deps.get
-$ mix firmware
-
-# Option 1: Insert a MicroSD card
-$ mix burn
-
-# Options 2: Upload to an existing Nerves Livebook device
-$ mix firmware.gen.script
-$ ./upload.sh nerves.local
-```
+Then open the samples/govee.livemd file and run the code in there.
